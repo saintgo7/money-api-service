@@ -16,6 +16,10 @@ from src.core.redis_client import init_redis, close_redis
 from src.middleware.logging import LoggingMiddleware
 from src.middleware.error_handler import ErrorHandlerMiddleware
 from src.middleware.rate_limit_headers import RateLimitHeadersMiddleware
+from src.middleware.security_headers import SecurityHeadersMiddleware
+from src.middleware.metrics import MetricsMiddleware
+from src.middleware.audit_log import AuditLogMiddleware
+from src.api.v1 import metrics
 from src.utils.logging_config import setup_logging
 
 settings = get_settings()
@@ -46,6 +50,9 @@ app = FastAPI(
 )
 
 # Middleware (order matters - first added is outermost)
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(MetricsMiddleware)
+app.add_middleware(AuditLogMiddleware)
 app.add_middleware(ErrorHandlerMiddleware)
 app.add_middleware(LoggingMiddleware)
 app.add_middleware(RateLimitHeadersMiddleware)
@@ -76,6 +83,9 @@ app.include_router(admin.router, prefix="/api")
 app.include_router(streaming.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api")
 app.include_router(teams.router, prefix="/api")
+
+# Metrics endpoint
+app.include_router(metrics.router)
 
 
 @app.get("/")
