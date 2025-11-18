@@ -1,0 +1,219 @@
+{
+  "name": "money-api",
+  "displayName": "Money API",
+  "description": "Official VS Code extension for Money API Service - AI API platform with cost tracking",
+  "version": "2.0.0",
+  "publisher": "money-api",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "AI",
+    "Machine Learning",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "openai",
+    "anthropic",
+    "claude",
+    "gpt",
+    "api",
+    "cost tracking"
+  ],
+  "activationEvents": [
+    "onCommand:money-api.generate",
+    "onCommand:money-api.generateImage",
+    "onCommand:money-api.showBalance",
+    "onCommand:money-api.showUsage",
+    "onView:moneyApiExplorer"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "money-api.configure",
+        "title": "Configure API Key",
+        "category": "Money API"
+      },
+      {
+        "command": "money-api.generate",
+        "title": "Generate Text",
+        "category": "Money API"
+      },
+      {
+        "command": "money-api.generateImage",
+        "title": "Generate Image",
+        "category": "Money API"
+      },
+      {
+        "command": "money-api.showBalance",
+        "title": "Show Balance",
+        "category": "Money API"
+      },
+      {
+        "command": "money-api.showUsage",
+        "title": "Show Usage Statistics",
+        "category": "Money API"
+      },
+      {
+        "command": "money-api.predictCost",
+        "title": "Predict Monthly Cost",
+        "category": "Money API"
+      },
+      {
+        "command": "money-api.detectAnomalies",
+        "title": "Detect Anomalies",
+        "category": "Money API"
+      },
+      {
+        "command": "money-api.refresh",
+        "title": "Refresh",
+        "category": "Money API",
+        "icon": "$(refresh)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "money-api",
+          "title": "Money API",
+          "icon": "$(credit-card)"
+        }
+      ]
+    },
+    "views": {
+      "money-api": [
+        {
+          "id": "moneyApiExplorer",
+          "name": "Account Overview"
+        },
+        {
+          "id": "moneyApiInsights",
+          "name": "Usage Insights"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "money-api.refresh",
+          "when": "view == moneyApiExplorer",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "money-api.generate",
+          "group": "moneyapi",
+          "when": "editorHasSelection"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "money-api.configure"
+        },
+        {
+          "command": "money-api.generate"
+        },
+        {
+          "command": "money-api.generateImage"
+        },
+        {
+          "command": "money-api.showBalance"
+        },
+        {
+          "command": "money-api.showUsage"
+        },
+        {
+          "command": "money-api.predictCost"
+        },
+        {
+          "command": "money-api.detectAnomalies"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Money API",
+      "properties": {
+        "moneyApi.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your Money API key",
+          "order": 1
+        },
+        "moneyApi.baseUrl": {
+          "type": "string",
+          "default": "https://api.money-api.com",
+          "description": "Base API URL",
+          "order": 2
+        },
+        "moneyApi.defaultModel": {
+          "type": "string",
+          "default": "claude-3-sonnet",
+          "enum": [
+            "claude-3-opus",
+            "claude-3-sonnet",
+            "claude-3-haiku",
+            "gpt-4",
+            "gpt-4-turbo",
+            "gpt-3.5-turbo"
+          ],
+          "description": "Default model for text generation",
+          "order": 3
+        },
+        "moneyApi.maxTokens": {
+          "type": "number",
+          "default": 1000,
+          "description": "Maximum tokens for text generation",
+          "order": 4
+        },
+        "moneyApi.showCostNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show cost notifications after API calls",
+          "order": 5
+        },
+        "moneyApi.autoRefreshInterval": {
+          "type": "number",
+          "default": 60,
+          "description": "Auto-refresh interval for balance/usage (seconds, 0 to disable)",
+          "order": 6
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "typescript": "^5.1.0",
+    "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^2.19.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/money-api/vscode-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/money-api/vscode-extension/issues"
+  },
+  "homepage": "https://docs.money-api.com",
+  "license": "MIT"
+}

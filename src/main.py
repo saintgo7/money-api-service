@@ -7,7 +7,7 @@ import strawberry
 from strawberry.fastapi import GraphQLRouter
 
 from src.config import get_settings
-from src.api.v1 import text, image, audio, document, management, webhooks, admin, streaming, analytics, teams
+from src.api.v1 import text, image, audio, document, management, webhooks, admin, streaming, analytics, teams, batch, fine_tuning, ml_predictions
 from src.graphql.schema import schema
 from src.graphql.context import get_graphql_context
 from src.websocket import router as websocket_router
@@ -43,7 +43,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.app_name,
     description="AI API Service Platform for Developers",
-    version="1.0.0",
+    version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan
@@ -83,6 +83,9 @@ app.include_router(admin.router, prefix="/api")
 app.include_router(streaming.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api")
 app.include_router(teams.router, prefix="/api")
+app.include_router(batch.router, prefix="/api")
+app.include_router(fine_tuning.router, prefix="/api")
+app.include_router(ml_predictions.router, prefix="/api")
 
 # Metrics endpoint
 app.include_router(metrics.router)
@@ -93,9 +96,18 @@ async def root():
     """Root endpoint."""
     return {
         "name": settings.app_name,
-        "version": "1.0.0",
+        "version": "2.0.0",
         "docs": "/docs",
-        "status": "operational"
+        "status": "operational",
+        "features": [
+            "Text & Image Generation",
+            "Batch Processing (up to 100 requests)",
+            "AI Model Fine-Tuning",
+            "ML-based Cost Prediction",
+            "Real-time WebSocket Updates",
+            "GraphQL API",
+            "Usage Analytics & Insights"
+        ]
     }
 
 
