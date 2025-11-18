@@ -5,7 +5,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from contextlib import asynccontextmanager
 
 from src.config import get_settings
-from src.api.v1 import text, image, audio, document, management
+from src.api.v1 import text, image, audio, document, management, webhooks, admin
 from src.core.database import init_db, close_db
 from src.core.redis_client import init_redis, close_redis
 from src.middleware.logging import LoggingMiddleware
@@ -59,6 +59,8 @@ app.include_router(image.router, prefix="/api")
 app.include_router(audio.router, prefix="/api")
 app.include_router(document.router, prefix="/api")
 app.include_router(management.router, prefix="/api")
+app.include_router(webhooks.router, prefix="/api")
+app.include_router(admin.router, prefix="/api")
 
 
 @app.get("/")

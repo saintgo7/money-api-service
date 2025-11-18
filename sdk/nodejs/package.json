@@ -1,0 +1,38 @@
+{
+  "name": "@money-api/client",
+  "version": "1.0.0",
+  "description": "Official Node.js SDK for Money API Service",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ai",
+    "api",
+    "money-api",
+    "openai",
+    "claude",
+    "gpt-4",
+    "image-generation",
+    "text-generation"
+  ],
+  "author": "Money API Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/money-api-service"
+  },
+  "dependencies": {
+    "axios": "^1.6.5",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.11"
+  }
+}
