@@ -1,0 +1,2 @@
+# GraphQL dependencies
+strawberry-graphql[fastapi]==0.219.2

@@ -3,9 +3,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from contextlib import asynccontextmanager
+import strawberry
+from strawberry.fastapi import GraphQLRouter
 
 from src.config import get_settings
-from src.api.v1 import text, image, audio, document, management, webhooks, admin
+from src.api.v1 import text, image, audio, document, management, webhooks, admin, streaming, analytics, teams
+from src.graphql.schema import schema
+from src.graphql.context import get_graphql_context
+from src.websocket import router as websocket_router
 from src.core.database import init_db, close_db
 from src.core.redis_client import init_redis, close_redis
 from src.middleware.logging import LoggingMiddleware
@@ -53,6 +58,13 @@ app.add_middleware(
 )
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
+# GraphQL Router
+graphql_app = GraphQLRouter(schema, context_getter=get_graphql_context)
+app.include_router(graphql_app, prefix="/graphql")
+
+# WebSocket Router
+app.include_router(websocket_router)
+
 # Include routers
 app.include_router(text.router, prefix="/api")
 app.include_router(image.router, prefix="/api")
@@ -61,6 +73,9 @@ app.include_router(document.router, prefix="/api")
 app.include_router(management.router, prefix="/api")
 app.include_router(webhooks.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
+app.include_router(streaming.router, prefix="/api")
+app.include_router(analytics.router, prefix="/api")
+app.include_router(teams.router, prefix="/api")
 
 
 @app.get("/")

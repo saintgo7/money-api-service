@@ -24,6 +24,7 @@ class Usage(Base):
     # Usage metrics
     tokens = Column(Integer, default=0)
     duration_ms = Column(Integer, default=0)
+    latency = Column(Integer, default=0)  # Response time in milliseconds
     status_code = Column(Integer, nullable=False)
 
     # Cost
