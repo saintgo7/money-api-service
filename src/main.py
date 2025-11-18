@@ -8,8 +8,15 @@ from src.config import get_settings
 from src.api.v1 import text, image, audio, document, management
 from src.core.database import init_db, close_db
 from src.core.redis_client import init_redis, close_redis
+from src.middleware.logging import LoggingMiddleware
+from src.middleware.error_handler import ErrorHandlerMiddleware
+from src.middleware.rate_limit_headers import RateLimitHeadersMiddleware
+from src.utils.logging_config import setup_logging
 
 settings = get_settings()
+
+# Setup logging
+setup_logging(log_level=settings.app_env == "development" and "DEBUG" or "INFO")
 
 
 @asynccontextmanager
@@ -33,7 +40,10 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Middleware
+# Middleware (order matters - first added is outermost)
+app.add_middleware(ErrorHandlerMiddleware)
+app.add_middleware(LoggingMiddleware)
+app.add_middleware(RateLimitHeadersMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins.split(","),
